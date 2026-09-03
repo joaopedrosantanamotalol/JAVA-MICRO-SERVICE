@@ -12,8 +12,8 @@ public class ProdutoService {
 
     // esse método verifica a quantidade de produtos presentes
     public void ValidarQuantidade(ProdutoDomain produto){
-        if(produto.getQuantidade() <= 0){
-            throw new IllegalArgumentException("Não temos Produtos");
+        if(produto.getQuantidade() < 0){
+            throw new IllegalArgumentException("Não podemos ter produtos negativos");
         }
     }
 

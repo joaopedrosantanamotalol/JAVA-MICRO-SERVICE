@@ -3,27 +3,19 @@ package com.example.produto_branch.base.infra.persistence.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.produto_branch.base.application.dto.ProdutoDtoMapper;
-import com.example.produto_branch.base.application.dto.ProdutoResponse;
 import com.example.produto_branch.base.domain.entities.ProdutoDomain;
 import com.example.produto_branch.base.domain.repositories.ProdutoRepository;
-import com.example.produto_branch.base.domain.services.ProdutoService;
 import com.example.produto_branch.base.infra.persistence.entities.ProdutoEntity;
 import com.example.produto_branch.base.infra.persistence.mapper.ProdutoPersistenceMapper;
 
 public class ProdutoRepositoryImpl implements ProdutoRepository {
     
     private final ProdutoPersistenceMapper persistence_mapper;
-    private final ProdutoJpaRepository repository;
-    private final ProdutoService service;
+    private final ProdutoJpaRepository repository;    
 
-    
-
-    public ProdutoRepositoryImpl(ProdutoPersistenceMapper persistence_mapper, ProdutoJpaRepository repository,
-            ProdutoService service) {
+    public ProdutoRepositoryImpl(ProdutoPersistenceMapper persistence_mapper, ProdutoJpaRepository repository) {
         this.persistence_mapper = persistence_mapper;
         this.repository = repository;
-        this.service = service;
     }
 
     @Override
@@ -44,7 +36,7 @@ public class ProdutoRepositoryImpl implements ProdutoRepository {
     } 
 
     @Override
-    public ProdutoDomain editar(Long id, ProdutoEntity dados){
+    public ProdutoDomain editar(Long id, ProdutoDomain dados){
 
         ProdutoEntity entity = repository.findById(id)
         .orElseThrow(() -> new RuntimeException("produto não achado"));
