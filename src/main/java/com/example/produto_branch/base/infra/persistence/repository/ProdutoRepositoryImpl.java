@@ -3,11 +3,14 @@ package com.example.produto_branch.base.infra.persistence.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.example.produto_branch.base.domain.entities.ProdutoDomain;
 import com.example.produto_branch.base.domain.repositories.ProdutoRepository;
 import com.example.produto_branch.base.infra.persistence.entities.ProdutoEntity;
 import com.example.produto_branch.base.infra.persistence.mapper.ProdutoPersistenceMapper;
 
+@Repository
 public class ProdutoRepositoryImpl implements ProdutoRepository {
     
     private final ProdutoPersistenceMapper persistence_mapper;

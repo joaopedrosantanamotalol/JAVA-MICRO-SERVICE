@@ -1,5 +1,7 @@
 package com.example.produto_branch.base.application.usecases;
 
+import org.springframework.stereotype.Service;
+
 import com.example.produto_branch.base.application.dto.ProdutoDtoMapper;
 import com.example.produto_branch.base.application.dto.ProdutoRequest;
 import com.example.produto_branch.base.application.dto.ProdutoResponse;
@@ -7,6 +9,7 @@ import com.example.produto_branch.base.domain.entities.ProdutoDomain;
 import com.example.produto_branch.base.domain.repositories.ProdutoRepository;
 import com.example.produto_branch.base.domain.services.ProdutoService;
 
+@Service
 public class EditarProdutoUseCase {
  
     private final ProdutoService service;
