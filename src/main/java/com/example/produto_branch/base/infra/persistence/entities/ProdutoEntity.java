@@ -6,6 +6,8 @@ import com.example.produto_branch.base.domain.enums.produto.Categoria;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,6 +33,7 @@ public class ProdutoEntity {
     private double valorUnitario;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private List<Categoria> categoria;
 
     public long getId() {
