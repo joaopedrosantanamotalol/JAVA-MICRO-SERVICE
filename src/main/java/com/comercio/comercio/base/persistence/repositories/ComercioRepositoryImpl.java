@@ -1,38 +1,79 @@
 package com.comercio.comercio.base.persistence.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
-import com.comercio.comercio.base.application.dto.ComercioRequest;
-import com.comercio.comercio.base.application.dto.ComercioResponse;
+import com.comercio.comercio.base.domain.entites.ComercioEntity;
 import com.comercio.comercio.base.domain.repositories.ComercioDOMAINRepository;
+import com.comercio.comercio.base.persistence.entites.ComercioPersistence;
+import com.comercio.comercio.base.persistence.mapper.ComercioMapper;
 
-public class ComercioRepositoryImpl implements ComercioDOMAINRepository {
+
+    public class ComercioRepositoryImpl implements ComercioDOMAINRepository {
     
     private final ComercioJPARepository repository;
+    private final ComercioMapper mapper;
 
+    
 
-    public ComercioRepositoryImpl(ComercioJPARepository repository) {
+    public ComercioRepositoryImpl(ComercioJPARepository repository, ComercioMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
+    }
+    
+    @Override
+    public ComercioEntity salvar(ComercioEntity comercio){
+        ComercioPersistence persistence = mapper.toPersistence(comercio);
+
+        ComercioPersistence salvo = repository.save(persistence);
+
+        return mapper.toDomain(salvo);
     }
 
     @Override
-    public ComercioResponse criarComercio(ComercioRequest request){
-        
+        public ComercioEntity editar(Long id, ComercioEntity comercio){
+
+            ComercioPersistence persistence = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("nao foi possivel achar"));
+
+            persistence.setCnpj(comercio.getCnpj());
+            persistence.setComercio(comercio.getComercio());
+            persistence.setDescricao(comercio.getDescricao());
+            persistence.setNome(comercio.getNome());
+            persistence.setTamanho(comercio.getTamanho());
+
+            ComercioPersistence salvo = repository.save(persistence);
+
+            return mapper.toDomain(salvo);
+
+        }
+
+    @Override
+    public Optional<ComercioEntity> acharPorId(Long id) {
+
+        return repository.findById(id)
+                .map(mapper::toDomain);
     }
 
     @Override
-    public ComercioResponse editarComercio(ComercioRequest request, Long id){
+    public List<ComercioEntity> listar(){
+        return repository.findAll()
+        .stream()
+        .map(mapper::toDomain)
+        .toList();
+    }
+
+    @Override
+    public void deletar(Long id){
+
+        repository.deleteById(id);
 
     }
 
     @Override
-    public List<ComercioResponse> listarComercios(){
-
+    public boolean existePorId(Long id) {
+        return repository.existsById(id);
     }
 
-    @Override
-    public void deletarComercio(){
-
-    }
 
 }

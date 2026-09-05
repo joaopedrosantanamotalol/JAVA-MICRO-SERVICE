@@ -1,18 +1,22 @@
 package com.comercio.comercio.base.domain.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
-import com.comercio.comercio.base.application.dto.ComercioRequest;
-import com.comercio.comercio.base.application.dto.ComercioResponse;
+import com.comercio.comercio.base.domain.entites.ComercioEntity;
 
 public interface ComercioDOMAINRepository {
 
-    ComercioResponse criarComercio(ComercioRequest request);
+    ComercioEntity salvar(ComercioEntity comercio);
 
-    ComercioResponse editarComercio(ComercioRequest request, Long id);
+    ComercioEntity editar(Long id, ComercioEntity comercio);
 
-    List<ComercioResponse> listarComercios();
+    Optional<ComercioEntity> acharPorId(Long id);
 
-    void deletarComercio();
+    List<ComercioEntity> listar();
+
+    void deletar(Long id);
+
+    boolean existePorId(Long id);
 
 }

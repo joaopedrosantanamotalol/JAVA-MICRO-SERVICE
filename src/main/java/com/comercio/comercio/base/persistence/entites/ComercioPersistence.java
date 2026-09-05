@@ -2,8 +2,8 @@ package com.comercio.comercio.base.persistence.entites;
 
 import java.util.List;
 
-import com.comercio.comercio.base.persistence.enums.CategoriaComercio;
-import com.comercio.comercio.base.persistence.enums.TamanhoComercio;
+import com.comercio.comercio.base.domain.enums.CategoriaComercio;
+import com.comercio.comercio.base.domain.enums.TamanhoComercio;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
