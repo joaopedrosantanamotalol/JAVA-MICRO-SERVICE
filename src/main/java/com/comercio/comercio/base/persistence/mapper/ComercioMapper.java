@@ -21,6 +21,7 @@ public interface ComercioMapper {
 
     ComercioResponse toResponse(ComercioEntity entity);
 
+    @Mapping(target = "id", ignore = true)
     void atualizarDomain(
         ComercioRequest request,
         @MappingTarget ComercioEntity entity
