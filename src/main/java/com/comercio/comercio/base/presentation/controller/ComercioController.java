@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.comercio.comercio.base.application.dto.ComercioRequest;
 import com.comercio.comercio.base.application.dto.ComercioResponse;
@@ -16,8 +17,6 @@ import com.comercio.comercio.base.application.usecases.CriarComercioUseCase;
 import com.comercio.comercio.base.application.usecases.EditarComercioUseCase;
 import com.comercio.comercio.base.application.usecases.ExcluirComercioUseCase;
 import com.comercio.comercio.base.application.usecases.ListarComercioUseCase;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController 
 @RequestMapping("/comercio")
