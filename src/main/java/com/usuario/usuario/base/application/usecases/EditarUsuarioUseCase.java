@@ -16,11 +16,13 @@ public class EditarUsuarioUseCase {
         this.repository = repository;
     }
 
-    public UsuarioResponse executar(UsuarioRequest request){
+    public UsuarioResponse executar(UsuarioRequest request, Long id){
 
         UsuarioEntity entity = mapper.toDomain(request);
 
-        UsuarioEntity salvo = repository.salvar(entity);
+        UsuarioEntity salvo = repository.editar(id,entity);
+
+        return mapper.toResponse(salvo);
 
     }
 

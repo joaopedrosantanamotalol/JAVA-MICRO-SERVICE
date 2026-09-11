@@ -12,6 +12,8 @@ public interface UsuarioRepository {
 
     UsuarioEntity editar(Long id, UsuarioEntity entity);
 
+    UsuarioEntity acharPorId(Long id);
+
     void excluir(Long id);
 
 }
