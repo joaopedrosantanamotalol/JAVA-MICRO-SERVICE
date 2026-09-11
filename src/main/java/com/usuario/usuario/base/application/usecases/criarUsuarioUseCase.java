@@ -23,6 +23,9 @@ public class criarUsuarioUseCase {
 
     public UsuarioResponse executar(UsuarioRequest request){
         UsuarioEntity entity = mapper.toDomain(request);
+
+        UsuarioRes
+
     }
 
 }

@@ -1,6 +1,7 @@
 package com.usuario.usuario.base.persistence.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.usuario.usuario.base.application.dto.UsuarioRequest;
 import com.usuario.usuario.base.application.dto.UsuarioResponse;
@@ -14,6 +15,7 @@ public interface UsuarioMapper {
 
     UsuarioEntity toDomain(UsuarioPersistence entity);
 
+    @Mapping (target = "id", ignore = true)
     UsuarioEntity toDomain(UsuarioRequest entity);
 
     UsuarioResponse toResponse(UsuarioEntity entity);
