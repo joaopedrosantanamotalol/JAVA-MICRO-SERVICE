@@ -22,7 +22,7 @@ public class criarUsuarioUseCase {
 
 
     public UsuarioResponse executar(UsuarioRequest request){
-        UsuarioEntity entity = repository.salvar(request);
+        UsuarioEntity entity = mapper.toDomain(request);
     }
 
 }
