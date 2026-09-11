@@ -13,7 +13,7 @@ public class DeletarUsuarioUseCase {
 
     public void executar(Long id){
 
-        UsuarioEntity entity = repository.acharPorId(id)
+        repository.acharPorId(id)
         .orElseThrow(() -> new RuntimeException("não foi possivel achar esse usuario"));
 
         repository.excluir(id);
