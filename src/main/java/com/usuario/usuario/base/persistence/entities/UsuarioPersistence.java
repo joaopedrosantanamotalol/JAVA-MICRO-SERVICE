@@ -28,6 +28,9 @@ public class UsuarioPersistence {
 
     @Column(nullable = false)
     private String cpf;
+
+    @Column(nullable = false)
+    private String senha;
     
     public Long getId() {
         return id;
@@ -64,6 +67,12 @@ public class UsuarioPersistence {
     }
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+    public String getSenha() {
+        return senha;
+    }
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
 }

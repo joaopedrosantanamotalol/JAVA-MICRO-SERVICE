@@ -10,7 +10,9 @@ public class UsuarioEntity {
     private Sexo sexo;
     private String telefone;
     private String cpf;
-    
+    private String senha;
+
+        
     public Long getId() {
         return id;
     }
@@ -46,6 +48,12 @@ public class UsuarioEntity {
     }
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+    public String getSenha() {
+        return senha;
+    }
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     

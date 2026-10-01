@@ -20,6 +20,10 @@ public class EditarUsuarioUseCase {
 
         UsuarioEntity entity = mapper.toDomain(request);
 
+        if(!repository.existePorId(id)){
+            throw new RuntimeException("não foi possivel achar o usuario");
+        }
+
         UsuarioEntity salvo = repository.editar(id,entity);
 
         return mapper.toResponse(salvo);

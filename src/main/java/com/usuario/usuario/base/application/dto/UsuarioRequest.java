@@ -8,6 +8,7 @@ public record UsuarioRequest (
  String email,
  Sexo sexo,
  String telefone,
- String cpf
+ String cpf,
+ String senha
 
 ){}

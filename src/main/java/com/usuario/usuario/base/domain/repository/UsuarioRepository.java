@@ -17,4 +17,8 @@ public interface UsuarioRepository {
 
     void excluir(Long id);
 
+    Boolean existePorId(Long id);
+
+    Optional<UsuarioEntity> acharPorEmail(String email);
+    
 }
