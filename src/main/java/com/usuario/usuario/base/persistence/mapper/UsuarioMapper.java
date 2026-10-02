@@ -3,8 +3,6 @@ package com.usuario.usuario.base.persistence.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.usuario.usuario.base.application.dto.LoginRequest;
-import com.usuario.usuario.base.application.dto.LoginResponse;
 import com.usuario.usuario.base.application.dto.UsuarioRequest;
 import com.usuario.usuario.base.application.dto.UsuarioResponse;
 import com.usuario.usuario.base.domain.entities.UsuarioEntity;
