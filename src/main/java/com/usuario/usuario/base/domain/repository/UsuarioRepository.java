@@ -11,7 +11,7 @@ public interface UsuarioRepository {
 
     List<UsuarioEntity> listarTodos();
 
-    UsuarioEntity editar(Long id, UsuarioEntity entity);
+    UsuarioEntity editar(Long id, UsuarioEntity entity, String email);
 
     Optional<UsuarioEntity> acharPorId(Long id);
 

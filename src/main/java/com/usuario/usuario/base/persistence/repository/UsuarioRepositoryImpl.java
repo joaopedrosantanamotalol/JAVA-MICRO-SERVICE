@@ -39,7 +39,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     }
 
     @Override
-    public UsuarioEntity editar(Long id, UsuarioEntity entity){
+    public UsuarioEntity editar(Long id, UsuarioEntity entity, String email){
 
         UsuarioPersistence entidade = jpaRep.findById(id)
         .orElseThrow(() -> new RuntimeException("deu pra char não"));

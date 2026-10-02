@@ -16,7 +16,7 @@ public class EditarUsuarioUseCase {
         this.repository = repository;
     }
 
-    public UsuarioResponse executar(UsuarioRequest request, Long id){
+    public UsuarioResponse executar(UsuarioRequest request, Long id, String email){
 
         UsuarioEntity entity = mapper.toDomain(request);
 
@@ -24,7 +24,7 @@ public class EditarUsuarioUseCase {
             throw new RuntimeException("não foi possivel achar o usuario");
         }
 
-        UsuarioEntity salvo = repository.editar(id,entity);
+        UsuarioEntity salvo = repository.editar(id,entity,email);
 
         return mapper.toResponse(salvo);
 
