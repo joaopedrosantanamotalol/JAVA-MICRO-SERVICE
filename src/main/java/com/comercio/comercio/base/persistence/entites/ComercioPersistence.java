@@ -1,21 +1,28 @@
+
 package com.comercio.comercio.base.persistence.entites;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.comercio.comercio.base.domain.enums.CategoriaComercio;
 import com.comercio.comercio.base.domain.enums.TamanhoComercio;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
 
-@Entity(name = "comercio")
+@Entity
+@Table(name = "comercio")
 public class ComercioPersistence {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,15 +33,20 @@ public class ComercioPersistence {
     @Column(nullable = false)
     private String descricao;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 14)
     private String cnpj;
 
-    @Column(nullable = false)
+    @ElementCollection
+    @CollectionTable(
+        name = "comercio_categorias",
+        joinColumns = @JoinColumn(name = "comercio_id")
+    )
+    @Column(name = "categoria", nullable = false)
     @Enumerated(EnumType.STRING)
-    private List<CategoriaComercio> comercio;
+    private List<CategoriaComercio> categorias = new ArrayList<>();
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TamanhoComercio tamanho;
 
     public Long getId() {
@@ -69,12 +81,12 @@ public class ComercioPersistence {
         this.cnpj = cnpj;
     }
 
-    public List<CategoriaComercio> getComercio() {
-        return comercio;
+    public List<CategoriaComercio> getCategorias() {
+        return categorias;
     }
 
-    public void setComercio(List<CategoriaComercio> comercio) {
-        this.comercio = comercio;
+    public void setCategorias(List<CategoriaComercio> categorias) {
+        this.categorias = categorias;
     }
 
     public TamanhoComercio getTamanho() {
@@ -84,5 +96,4 @@ public class ComercioPersistence {
     public void setTamanho(TamanhoComercio tamanho) {
         this.tamanho = tamanho;
     }
-
 }

@@ -30,23 +30,24 @@
             return mapper.toDomain(salvo);
         }
 
-            @Override
-            public ComercioEntity editar(Long id, ComercioEntity comercio){
+            
+    @Override
+    public ComercioEntity editar(Long id, ComercioEntity comercio) {
 
-                ComercioPersistence persistence = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("nao foi possivel achar"));
+        ComercioPersistence persistence = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Não foi possível encontrar o comércio"));
 
-                persistence.setCnpj(comercio.getCnpj());
-                persistence.setComercio(comercio.getComercio());
-                persistence.setDescricao(comercio.getDescricao());
-                persistence.setNome(comercio.getNome());
-                persistence.setTamanho(comercio.getTamanho());
+        persistence.setCnpj(comercio.getCnpj());
+        persistence.setCategorias(comercio.getComercio());
+        persistence.setDescricao(comercio.getDescricao());
+        persistence.setNome(comercio.getNome());
+        persistence.setTamanho(comercio.getTamanho());
 
-                ComercioPersistence salvo = repository.save(persistence);
+        ComercioPersistence salvo = repository.save(persistence);
 
-                return mapper.toDomain(salvo);
+        return mapper.toDomain(salvo);
+    }
 
-            }
 
         @Override
         public Optional<ComercioEntity> acharPorId(Long id) {

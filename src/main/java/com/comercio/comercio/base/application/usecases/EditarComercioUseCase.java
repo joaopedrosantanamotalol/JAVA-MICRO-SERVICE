@@ -19,16 +19,15 @@ public class EditarComercioUseCase {
         this.mapper = mapper;
     }
 
-    public ComercioResponse executar(Long id, ComercioRequest request){
-        ComercioEntity entity = repository.acharPorId(id)
-        .orElseThrow(() -> new RuntimeException("nao foi possivel achar"));
 
-        mapper.atualizarDomain(request, entity);
+    public ComercioResponse executar(Long id, ComercioRequest request) {
 
-        ComercioEntity salvo = repository.salvar(entity);
+        ComercioEntity entity = mapper.toDomain(request);
+
+        ComercioEntity salvo = repository.editar(id, entity);
 
         return mapper.toResponse(salvo);
-
     }
+
 
 }

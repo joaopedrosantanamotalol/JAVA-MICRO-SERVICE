@@ -6,15 +6,9 @@ import com.comercio.comercio.base.domain.enums.CategoriaComercio;
 import com.comercio.comercio.base.domain.enums.TamanhoComercio;
 
 public record ComercioRequest(
-
- String nome,
-
- String descricao,
-
- String cnpj,
-
- List<CategoriaComercio> comercio,
-
- TamanhoComercio tamanho
-
+    String nome,
+    String descricao,
+    String cnpj,
+    List<CategoriaComercio> categorias,
+    TamanhoComercio tamanho
 ) {}
