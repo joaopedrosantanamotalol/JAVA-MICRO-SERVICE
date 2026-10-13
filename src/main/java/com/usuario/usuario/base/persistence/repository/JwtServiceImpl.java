@@ -25,7 +25,7 @@ public class JwtServiceImpl implements TokenService {
 
         return Jwts.builder()
                 .subject(usuario.getEmail())
-                .claim("type", "acess")
+                .claim("type", "access")
                 .issuedAt(new Date())
                 .expiration(
                         new Date(System.currentTimeMillis() + 15 * 60 * 1000)
@@ -75,5 +75,21 @@ public class JwtServiceImpl implements TokenService {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+
+    @Override
+    public boolean validateAccessToken(String token) {
+        try {
+            var claims = Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(SECRET.getBytes()))
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            return "access".equals(claims.get("type"));
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

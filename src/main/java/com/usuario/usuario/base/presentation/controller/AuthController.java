@@ -1,5 +1,6 @@
 package com.usuario.usuario.base.presentation.controller;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,8 @@ import com.usuario.usuario.base.application.usecases.LoginUsuarioUseCase;
 import com.usuario.usuario.base.application.usecases.LogoutUseCase;
 import com.usuario.usuario.base.application.usecases.RefreshTokenUseCase;
 import com.usuario.usuario.base.persistence.mapper.UsuarioMapper;
+import com.usuario.usuario.base.presentation.cookie.AuthCookieFactory;
+import org.springframework.http.HttpHeaders;
 
 @RestController 
 @RequestMapping("/auth")
@@ -24,18 +27,20 @@ public class AuthController {
     private final LogoutUseCase logout;
     private final UsuarioMapper mapper;
     private final RefreshTokenUseCase refreshToken;
-
+    private final AuthCookieFactory cookieFactory;
 
     public AuthController(
             LoginUsuarioUseCase login,
             LogoutUseCase logout,
             RefreshTokenUseCase refreshToken,
-            UsuarioMapper mapper
+            UsuarioMapper mapper,
+            AuthCookieFactory cookieFactory
     ) {
         this.login = login;
         this.logout = logout;
         this.refreshToken = refreshToken;
         this.mapper = mapper;
+        this.cookieFactory = cookieFactory;
     }
 
     @PostMapping
@@ -43,16 +48,39 @@ public class AuthController {
         return mapper.requestToResponse(entity);
     }
 
-    @PostMapping("/login")
-    public LoginResponse efetuarLogin(@RequestBody  LoginRequest entity){
-        return login.executar(entity);
+   @PostMapping("/login")
+    public ResponseEntity<Void> efetuarLogin(
+            @RequestBody LoginRequest entity
+    ) {
+        LoginResponse response = login.executar(entity);
+
+        ResponseCookie accessCookie =
+                cookieFactory.accessToken(response.acesstoken());
+
+        ResponseCookie refreshCookie =
+                cookieFactory.refreshToken(response.refreshtoken());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .build();
     }
 
     @PostMapping("/logout")
-    public void logout() {
+    public ResponseEntity<Void> logout() {
 
         logout.executar();
 
+        return ResponseEntity.noContent()
+                .header(
+                        HttpHeaders.SET_COOKIE,
+                        cookieFactory.limparAccessToken().toString()
+                )
+                .header(
+                        HttpHeaders.SET_COOKIE,
+                        cookieFactory.limparRefreshToken().toString()
+                )
+                .build();
     }
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponse> refresh(

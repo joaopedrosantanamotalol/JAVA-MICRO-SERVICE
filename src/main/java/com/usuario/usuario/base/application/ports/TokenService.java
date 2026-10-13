@@ -7,6 +7,8 @@ public interface TokenService {
 
     String generateRefreshToken(UsuarioEntity usuario);
 
+    boolean validateAccessToken(String token);
+
     boolean validateRefreshToken(String token);
     
     String getEmailFromToken(String token);
