@@ -1,4 +1,3 @@
-
 package com.comercio.comercio.base.persistence.mapper;
 
 import org.mapstruct.Mapper;
