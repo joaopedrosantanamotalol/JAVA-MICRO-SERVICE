@@ -1,12 +1,17 @@
+
 package com.usuario.usuario.base.presentation.cookie;
 
 import java.time.Duration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AuthCookieFactory {
+
+    @Value("${app.auth.cookie-same-site:Lax}")
+    private String sameSite;
 
     public ResponseCookie accessToken(String token) {
         return ResponseCookie.from("accessToken", token)
@@ -23,7 +28,7 @@ public class AuthCookieFactory {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
-                .path("/auth")
+                .path("/")
                 .maxAge(Duration.ofDays(7))
                 .build();
     }
@@ -39,6 +44,16 @@ public class AuthCookieFactory {
     }
 
     public ResponseCookie limparRefreshToken() {
+        return ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(Duration.ZERO)
+                .build();
+    }
+
+    public ResponseCookie limparRefreshTokenAntigo() {
         return ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true)

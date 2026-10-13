@@ -19,21 +19,23 @@ public class RefreshTokenUseCase {
 
     public String executar(String refreshToken) {
 
-        if (!tokenService.validateRefreshToken(refreshToken)) {
-            throw new RuntimeException(
+        if (refreshToken == null
+                || refreshToken.isBlank()
+                || !tokenService.validateRefreshToken(refreshToken)) {
+            throw new RefreshTokenInvalidoException(
                     "Refresh token inválido ou expirado"
             );
         }
 
-        String email =
-                tokenService.getEmailFromToken(refreshToken);
+        String email = tokenService.getEmailFromToken(refreshToken);
 
-        UsuarioEntity usuario =
-                usuarioRepository
-                        .acharPorEmail(email)
-                        .orElseThrow(() ->
-                                new RuntimeException("Usuário não encontrado")
-                        );
+        UsuarioEntity usuario = usuarioRepository
+                .acharPorEmail(email)
+                .orElseThrow(() ->
+                        new RefreshTokenInvalidoException(
+                                "Usuário não encontrado"
+                        )
+                );
 
         return tokenService.generateAccessToken(usuario);
     }

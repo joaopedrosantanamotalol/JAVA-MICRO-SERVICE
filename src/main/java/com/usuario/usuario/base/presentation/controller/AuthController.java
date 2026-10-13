@@ -108,21 +108,39 @@ public class AuthController {
                         HttpHeaders.SET_COOKIE,
                         cookieFactory.limparRefreshToken().toString()
                 )
+                .header(
+                        HttpHeaders.SET_COOKIE,
+                        cookieFactory.limparRefreshTokenAntigo().toString()
+                )
                 .build();
         }
 
+       
         @PostMapping("/refresh")
-        public ResponseEntity<LoginResponse> refresh(
-                @RequestBody RefreshTokenRequest request
-        ) {
-                String accessToken = refreshToken.executar(request.refreshToken());
+        public ResponseEntity<Void> refresh(HttpServletRequest request) {
 
-                return ResponseEntity.ok(
-                        new LoginResponse(
-                                accessToken,
-                                request.refreshToken()
-                        )
-                );
+        String refreshTokenRecebido = null;
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                if ("refreshToken".equals(cookie.getName())) {
+                        refreshTokenRecebido = cookie.getValue();
+                        break;
+                }
+                }
         }
+
+        String novoAccessToken =
+                refreshToken.executar(refreshTokenRecebido);
+
+        return ResponseEntity.ok()
+                .header(
+                        HttpHeaders.SET_COOKIE,
+                        cookieFactory.accessToken(novoAccessToken).toString()
+                )
+                .build();
+        }
+
     
 }
