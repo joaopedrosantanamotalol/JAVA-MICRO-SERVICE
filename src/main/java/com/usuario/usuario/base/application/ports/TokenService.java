@@ -7,6 +7,10 @@ public interface TokenService {
 
     String generateRefreshToken(UsuarioEntity usuario);
 
+    void revokeToken(String token);
+
+    boolean isTokenRevoked(String token);
+
     boolean validateAccessToken(String token);
 
     boolean validateRefreshToken(String token);

@@ -7,7 +7,9 @@ import com.usuario.usuario.base.domain.entities.UsuarioEntity;
 import com.usuario.usuario.base.domain.repository.UsuarioRepository;
 import com.usuario.usuario.base.persistence.entities.UsuarioPersistence;
 import com.usuario.usuario.base.persistence.mapper.UsuarioMapper;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class UsuarioRepositoryImpl implements UsuarioRepository {
     
     private final UsuarioMapper mapper;
@@ -83,9 +85,10 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
         return true;
     }
 
-    @Override 
-    public Optional<UsuarioEntity> acharPorEmail(String email){
-        return jpaRep.findByEmail(email);
+    @Override
+    public Optional<UsuarioEntity> acharPorEmail(String email) {
+        return jpaRep.findByEmail(email)
+                .map(mapper::toDomain);
     }
 
 }

@@ -3,10 +3,12 @@ package com.usuario.usuario.base.persistence.entities;
 import com.usuario.usuario.base.domain.enums.Sexo;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+@Entity(name = "usuarios")
 public class UsuarioPersistence {
     
     @Id

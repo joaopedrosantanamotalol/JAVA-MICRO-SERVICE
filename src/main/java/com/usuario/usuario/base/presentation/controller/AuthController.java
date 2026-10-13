@@ -17,6 +17,10 @@ import com.usuario.usuario.base.application.usecases.LogoutUseCase;
 import com.usuario.usuario.base.application.usecases.RefreshTokenUseCase;
 import com.usuario.usuario.base.persistence.mapper.UsuarioMapper;
 import com.usuario.usuario.base.presentation.cookie.AuthCookieFactory;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpHeaders;
 
 @RestController 
@@ -67,9 +71,33 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout() {
+        public ResponseEntity<Void> logout(HttpServletRequest request) {
+        String accessToken = null;
+        String refreshToken = null;
 
-        logout.executar();
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                if ("accessToken".equals(cookie.getName())) {
+                        accessToken = cookie.getValue();
+                }
+
+                if ("refreshToken".equals(cookie.getName())) {
+                        refreshToken = cookie.getValue();
+                }
+                }
+        }
+
+        String authorization = request.getHeader("Authorization");
+
+        if (accessToken == null
+                && authorization != null
+                && authorization.startsWith("Bearer ")) {
+                accessToken = authorization.substring(7);
+        }
+
+        logout.executar(accessToken, refreshToken);
 
         return ResponseEntity.noContent()
                 .header(
@@ -81,19 +109,20 @@ public class AuthController {
                         cookieFactory.limparRefreshToken().toString()
                 )
                 .build();
-    }
-    @PostMapping("/refresh")
-    public ResponseEntity<LoginResponse> refresh(
-            @RequestBody RefreshTokenRequest request
-    ) {
-        String accessToken = refreshToken.executar(request.refreshToken());
+        }
 
-        return ResponseEntity.ok(
-                new LoginResponse(
-                        accessToken,
-                        request.refreshToken()
-                )
-        );
-    }
+        @PostMapping("/refresh")
+        public ResponseEntity<LoginResponse> refresh(
+                @RequestBody RefreshTokenRequest request
+        ) {
+                String accessToken = refreshToken.executar(request.refreshToken());
+
+                return ResponseEntity.ok(
+                        new LoginResponse(
+                                accessToken,
+                                request.refreshToken()
+                        )
+                );
+        }
     
 }

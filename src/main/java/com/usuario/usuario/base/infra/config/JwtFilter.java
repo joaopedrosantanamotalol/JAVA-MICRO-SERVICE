@@ -14,14 +14,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.usuario.usuario.base.application.ports.TokenService;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final TokenService tokenService;
 
-    public JwtFilter(JwtService jwtService) {
-        this.jwtService = jwtService;
+    public JwtFilter(TokenService tokenService) {
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -38,10 +39,8 @@ public class JwtFilter extends OncePerRequestFilter {
                         .getAuthentication() == null) {
 
             try {
-                if (jwtService.isTokenValid(token)) {
-
-                    String email =
-                            jwtService.extractUsername(token);
+                if (tokenService.validateAccessToken(token)) {
+                    String email = tokenService.getEmailFromToken(token);
 
                     var authentication =
                             new UsernamePasswordAuthenticationToken(

@@ -11,13 +11,26 @@ import com.usuario.usuario.base.domain.entities.UsuarioEntity;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
 @Service
 public class JwtServiceImpl implements TokenService {
 
     private final String SECRET;
 
-    public JwtServiceImpl(@Value("${jwt.secret}") String secret){
+    private final JdbcTemplate jdbcTemplate;
+
+    public JwtServiceImpl(
+            @Value("${jwt.secret}") String secret,
+            JdbcTemplate jdbcTemplate
+    ) {
         this.SECRET = secret;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
@@ -59,7 +72,8 @@ public class JwtServiceImpl implements TokenService {
                     .parseSignedClaims(token)
                     .getPayload();
 
-            return "refresh".equals(claims.get("type"));
+            return "refresh".equals(claims.get("type"))
+        && !isTokenRevoked(token);
 
         } catch (Exception e) {
 
@@ -86,10 +100,74 @@ public class JwtServiceImpl implements TokenService {
                     .parseSignedClaims(token)
                     .getPayload();
 
-            return "access".equals(claims.get("type"));
+            return "access".equals(claims.get("type"))
+        && !isTokenRevoked(token);
 
         } catch (Exception e) {
             return false;
         }
     }
+
+    @Override
+public void revokeToken(String token) {
+    if (token == null || token.isBlank()) {
+        return;
+    }
+
+    var claims = Jwts.parser()
+            .verifyWith(Keys.hmacShaKeyFor(SECRET.getBytes()))
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+
+    Date expiration = claims.getExpiration();
+
+    if (expiration == null || !expiration.after(new Date())) {
+        return;
+    }
+
+    String hash = hashToken(token);
+
+    jdbcTemplate.update("""
+        INSERT INTO tokens_revogados (token_hash, expira_em)
+        VALUES (?, ?)
+        ON DUPLICATE KEY UPDATE expira_em = VALUES(expira_em)
+        """,
+        hash,
+        new Timestamp(expiration.getTime())
+    );
+}
+
+    @Override
+    public boolean isTokenRevoked(String token) {
+        if (token == null || token.isBlank()) {
+            return false;
+        }
+
+        String hash = hashToken(token);
+
+        Integer count = jdbcTemplate.queryForObject("""
+            SELECT COUNT(*)
+            FROM tokens_revogados
+            WHERE token_hash = ?
+            AND expira_em > CURRENT_TIMESTAMP
+            """,
+            Integer.class,
+            hash
+        );
+
+        return count != null && count > 0;
+    }
+
+    private String hashToken(String token) {
+        try {
+            byte[] hash = MessageDigest.getInstance("SHA-256")
+                    .digest(token.getBytes(StandardCharsets.UTF_8));
+
+            return java.util.HexFormat.of().formatHex(hash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-256 indisponível", e);
+        }
+    }
+
 }
