@@ -2,6 +2,7 @@ package com.usuario.usuario.base.persistence.repository;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.usuario.usuario.base.application.ports.TokenService;
@@ -13,7 +14,11 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtServiceImpl implements TokenService {
 
-    private final String SECRET = "JAMUDOJAMUDOJAMUDOJAMUDOJAMUDO";
+    private final String SECRET;
+
+    public JwtServiceImpl(@Value("${jwt.secret}") String secret){
+        this.SECRET = secret;
+    }
 
     @Override
     public String generateAccessToken(UsuarioEntity usuario) {
