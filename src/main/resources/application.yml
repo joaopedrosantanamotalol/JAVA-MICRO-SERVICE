@@ -1,0 +1,48 @@
+
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: comercio-service
+              uri: ${COMERCIO_URL:http://comercio:8080}
+              predicates:
+                - Path=/api/comercio,/api/comercio/**
+              filters:
+                - StripPrefix=1
+
+            - id: produto-service
+              uri: ${PRODUTO_URL:http://produto:8081}
+              predicates:
+                - Path=/api/produtos,/api/produtos/**
+              filters:
+                - StripPrefix=1
+
+            - id: usuario-service
+              uri: ${USUARIO_URL:http://usuario:8080}
+              predicates:
+                - Path=/api/usuarios,/api/usuarios/**
+              filters:
+                - StripPrefix=1
+
+            - id: auth-service
+              uri: ${USUARIO_URL:http://usuario:8080}
+              predicates:
+                - Path=/api/auth,/api/auth/**
+              filters:
+                - StripPrefix=1
+
+
+server:
+  port: ${PORT:8080}
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
