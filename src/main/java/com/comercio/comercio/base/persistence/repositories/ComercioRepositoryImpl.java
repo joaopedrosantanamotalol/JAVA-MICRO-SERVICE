@@ -2,13 +2,13 @@
 
     import java.util.List;
     import java.util.Optional;
-
+    import org.springframework.stereotype.Repository;
     import com.comercio.comercio.base.domain.entites.ComercioEntity;
     import com.comercio.comercio.base.domain.repositories.ComercioDOMAINRepository;
     import com.comercio.comercio.base.persistence.entites.ComercioPersistence;
     import com.comercio.comercio.base.persistence.mapper.ComercioMapper;
 
-
+	@Repository	
         public class ComercioRepositoryImpl implements ComercioDOMAINRepository {
         
         private final ComercioJPARepository repository;

@@ -1,11 +1,14 @@
 package com.comercio.comercio.base.application.usecases;
 
+import org.springframework.stereotype.Service;
+
 import com.comercio.comercio.base.application.dto.ComercioRequest;
 import com.comercio.comercio.base.application.dto.ComercioResponse;
 import com.comercio.comercio.base.domain.entites.ComercioEntity;
 import com.comercio.comercio.base.domain.repositories.ComercioDOMAINRepository;
 import com.comercio.comercio.base.persistence.mapper.ComercioMapper;
 
+@Service
 public class EditarComercioUseCase {
 
     private final ComercioDOMAINRepository repository;
