@@ -95,15 +95,43 @@ public class JwtServiceImpl implements TokenService {
     public boolean validateAccessToken(String token) {
         try {
             var claims = Jwts.parser()
-                    .verifyWith(Keys.hmacShaKeyFor(SECRET.getBytes()))
+                    .verifyWith(Keys.hmacShaKeyFor(
+                            SECRET.getBytes(StandardCharsets.UTF_8)))
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
 
-            return "access".equals(claims.get("type"))
-        && !isTokenRevoked(token);
+            boolean isAccessToken = "access".equals(claims.get("type"));
+
+            if (!isAccessToken) {
+                System.err.println("[JWT] Token recebido não é do tipo access.");
+                return false;
+            }
+
+            boolean revoked = isTokenRevoked(token);
+
+            if (revoked) {
+                System.err.println("[JWT] Access token revogado.");
+                return false;
+            }
+
+            return true;
+
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            System.err.println("[JWT] Access token expirado.");
+            return false;
+
+        } catch (io.jsonwebtoken.security.SignatureException e) {
+            System.err.println("[JWT] Assinatura inválida.");
+            return false;
 
         } catch (Exception e) {
+            System.err.println(
+                    "[JWT] Falha na validação: "
+                    + e.getClass().getSimpleName()
+                    + " - "
+                    + e.getMessage()
+            );
             return false;
         }
     }
