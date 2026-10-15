@@ -79,9 +79,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext()
                             .setAuthentication(authentication);
                 }
+            } catch (io.jsonwebtoken.security.SignatureException exception) {
+                System.err.println("[JWT] Assinatura inválida.");
+                SecurityContextHolder.clearContext();
+            } catch (io.jsonwebtoken.ExpiredJwtException exception) {
+                System.err.println("[JWT] Token expirado.");
+                SecurityContextHolder.clearContext();
             } catch (JwtException | IllegalArgumentException exception) {
-                // Token inválido ou expirado: a rota protegida
-                // será negada pelo Spring Security.
+                System.err.println(
+                    "[JWT] Token inválido: " + exception.getClass().getSimpleName()
+                );
                 SecurityContextHolder.clearContext();
             }
         }
