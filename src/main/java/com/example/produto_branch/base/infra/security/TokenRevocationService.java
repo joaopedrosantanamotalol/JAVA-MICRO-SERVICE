@@ -27,10 +27,11 @@ public class TokenRevocationService {
             String hash = hashToken(token);
 
             Integer count = jdbcTemplate.queryForObject("""
-                SELECT COUNT(*)
-                FROM tokens_revogados
-                WHERE token_hash = ?
-                """, Integer.class, hash);
+            SELECT COUNT(*)
+            FROM tokens_revogados
+            WHERE token_hash = ?
+            AND expira_em > CURRENT_TIMESTAMP
+            """, Integer.class, hash);
 
             boolean revoked = count == null || count > 0;
 
