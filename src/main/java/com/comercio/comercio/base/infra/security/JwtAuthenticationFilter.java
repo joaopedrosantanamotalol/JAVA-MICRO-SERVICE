@@ -29,11 +29,14 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final SecretKey signingKey;
+    private final TokenRevocationService tokenRevocationService;
 
     public JwtAuthenticationFilter(
-            @Value("${jwt.secret}") String secret) {
+            @Value("${jwt.secret}") String secret,
+            TokenRevocationService tokenRevocationService) {
         this.signingKey = Keys.hmacShaKeyFor(
                 secret.getBytes(StandardCharsets.UTF_8));
+        this.tokenRevocationService = tokenRevocationService;
     }
 
     @Override
@@ -60,7 +63,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if ("access".equals(type)
                         && email != null
-                        && !email.isBlank()) {
+                        && !email.isBlank()
+                        && !tokenRevocationService.isRevoked(token)) {
 
                     var authentication =
                             new UsernamePasswordAuthenticationToken(
