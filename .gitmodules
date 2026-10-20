@@ -1,0 +1,16 @@
+[submodule "comercio"]
+	path = comercio
+	url = https://github.com/joaopedrosantanamotalol/JAVA-MICRO-SERVICE.git
+	branch = comercio
+[submodule "gateway"]
+	path = gateway
+	url = https://github.com/joaopedrosantanamotalol/JAVA-MICRO-SERVICE.git
+	branch = gateway
+[submodule "produto"]
+	path = produto
+	url = https://github.com/joaopedrosantanamotalol/JAVA-MICRO-SERVICE.git
+	branch = produto
+[submodule "usuario"]
+	path = usuario
+	url = https://github.com/joaopedrosantanamotalol/JAVA-MICRO-SERVICE.git
+	branch = usuario
