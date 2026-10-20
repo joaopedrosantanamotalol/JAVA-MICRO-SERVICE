@@ -26,6 +26,7 @@ public class CriarUsuarioUseCase {
 
         UsuarioEntity entity = mapper.toDomain(request);
 
+        entity.setCpf(passwordEncoder.encode(request.cpf()));
         entity.setSenha(passwordEncoder.encode(request.senha()));
 
         UsuarioEntity salvo = repository.salvar(entity);
